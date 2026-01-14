@@ -8,6 +8,8 @@ import { Routes, Route } from 'react-router'
 import TermsPage from './pages/TermsPage.tsx';
 import Homepage from './pages/Homepage.tsx';
 import NotFoundPage from './pages/NotFoundPage.tsx';
+import ProductDetailPage from './pages/ProductDetailPage.tsx';
+import ProductListPage from './pages/ProductListPage.tsx';
 
 // type Teacher = {
 //   name: string;
@@ -50,6 +52,11 @@ function App() {
       <Routes>
         <Route path='/' element={<Homepage />}></Route>
         <Route path='/terms' element={<TermsPage />} />
+        <Route path='/product-list' element={<ProductListPage />} />
+
+        // Dynamic Route
+        <Route path='/product/:productSlug' element={<ProductDetailPage />} />
+
         <Route path='*' element={<NotFoundPage />}></Route>
       </Routes>
     </>
