@@ -1,9 +1,13 @@
-// import React from 'react';
-import Welcome from './components/Welcome.tsx'
-import Header from './components/Header.tsx';
-// import ProfileCard from './components/ProfileCard.tsx';
-import Counter from './components/Counter.tsx';
-import Like from './components/Like.tsx';
+// // import React from 'react';
+// import Welcome from './components/Welcome.tsx'
+// import Header from './components/Header.tsx';
+// // import ProfileCard from './components/ProfileCard.tsx';
+// import Counter from './components/Counter.tsx';
+// import Like from './components/Like.tsx';
+import { Routes, Route } from 'react-router'
+import TermsPage from './pages/TermsPage.tsx';
+import Homepage from './pages/Homepage.tsx';
+import NotFoundPage from './pages/NotFoundPage.tsx';
 
 // type Teacher = {
 //   name: string;
@@ -42,17 +46,13 @@ import Like from './components/Like.tsx';
 // Component
 function App() {
   return (
-    <div style={{ padding: "16px 48px" }}>
-      <Header />
-      {/* {
-        teachers.map((teacher) => {
-          return <ProfileCard name={teacher.name} job={teacher.job} year={teacher.year} key={teacher.id} />
-        })
-      } */}
-      <Counter />
-      <Like />
-      <Welcome />
-    </div>
+    <>
+      <Routes>
+        <Route path='/' element={<Homepage />}></Route>
+        <Route path='/terms' element={<TermsPage />} />
+        <Route path='*' element={<NotFoundPage />}></Route>
+      </Routes>
+    </>
   );
 }
 
