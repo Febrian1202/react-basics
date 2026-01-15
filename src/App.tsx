@@ -1,6 +1,6 @@
 // // import React from 'react';
 // import Welcome from './components/Welcome.tsx'
-import Header from './components/Header.tsx';
+// import Header from './components/Header.tsx';
 // // import ProfileCard from './components/ProfileCard.tsx';
 // import Counter from './components/Counter.tsx';
 // import Like from './components/Like.tsx';
@@ -12,6 +12,7 @@ import ProductDetailPage from './pages/ProductDetailPage.tsx';
 import ProductListPage from './pages/ProductListPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
 import Navbar from './components/Navbar.tsx';
+import AboutPage from './pages/AboutPage.tsx';
 
 // type Teacher = {
 //   name: string;
@@ -56,11 +57,12 @@ function App() {
         <Routes>
           <Route path='/' element={<Homepage />}></Route>
           <Route path='/terms' element={<TermsPage />} />
-          <Route path='/product-list' element={<ProductListPage />} />
-          <Route path='/contact' element={<ContactPage />} />
-
         // Dynamic Route
           <Route path='/product/:productSlug' element={<ProductDetailPage />} />
+          <Route path='/product-list' element={<ProductListPage />} />
+          <Route path='/contact' element={<ContactPage />} />
+          <Route path='/about' element={<AboutPage />} />
+
 
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>

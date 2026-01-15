@@ -1,6 +1,6 @@
 // import React from 'react'
 import reactLogo from '../assets/react.svg'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router'
 
 const Navbar = () => {
     return (
@@ -10,10 +10,10 @@ const Navbar = () => {
                     <img src={reactLogo} alt="Logo" className='h-8' />
                 </div>
                 <div className='flex gap-6'>
-                    <Link to={'/'}>Home</Link>
-                    <Link to={'/product-list'}>Products</Link>
-                    <Link to={'/about'}>About</Link>
-                    <Link to={'/contact'}>Contact</Link>
+                    <NavLink to={'/'} end className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>Home</NavLink>
+                    <NavLink to={'/product-list'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>Products</NavLink>
+                    <NavLink to={'/about'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>About</NavLink>
+                    <NavLink to={'/contact'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>Contact</NavLink>
                 </div>
             </div>
         </nav>
