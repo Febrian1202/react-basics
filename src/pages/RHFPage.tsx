@@ -10,18 +10,27 @@ import { useState } from "react";
 // }
 
 const registerFromSchema = z.object({
-    username: z
+    name: z
         .string()
-        .min(3, { message: "Minimal 3 karakter cuy" })
-        .max(10, { message: "Maksimal 10 karakter cuy" }),
+        .min(3, { message: "Minimal 3 karakter cuy" }),
+    email: z
+        .string()
+        .trim()
+        .toLowerCase()
+        .email({ message: "Email tidak valid" }),
     password: z
         .string()
-        .min(8, { message: "Minimal 8 karakter cuy" }),
+        .min(8, { message: "Minimal 8 karakter cuy" })
+        .refine(val => /[A-Z]/.test(val), {
+            message: "Harus ada 1 huruf besar"
+        })
+        .refine(val => /\d/.test(val), {
+            message: "Harus mengandung angka"
+        }),
     repeatPassword: z
         .string()
-        .min(8),
+        .min(8, { message: "Minimal 8 karakter cuy" }),
     age: z.number({ message: "Masukkan angka cuy" }).min(18, { message: 'Minimal umur 18 tahun cuy' }),
-    dob: z.date().optional()
 })
     .superRefine((arg, ctx) => {
         if (arg.password !== arg.repeatPassword) {
@@ -42,9 +51,11 @@ const RHFPage = () => {
         resolver: zodResolver(registerFromSchema)
     });
 
+    const [users, setUsers] = useState<RegisterFormSchema[]>([])
+
     const handleRegisterUser = (values: RegisterFormSchema) => {
-        alert("Form Submitted");
-        console.log(values)
+        setUsers(prev => [...prev, values])
+        form.reset()
     }
 
     return (
@@ -56,10 +67,16 @@ const RHFPage = () => {
                 action="" className='flex flex-col gap-2 items-start p-4'>
 
                 <label className='flex flex-col gap-2'>
-                    Username:
-                    <input type="text" {...form.register("username")} />
+                    Nama:
+                    <input type="text" {...form.register("name")} />
                 </label>
-                <span className="text-red-500">{form.formState.errors.username?.message}</span>
+                <span className="text-red-500">{form.formState.errors.name?.message}</span>
+
+                <label className='flex flex-col gap-2'>
+                    Email:
+                    <input type="email" {...form.register("email")} />
+                </label>
+                <span className="text-red-500">{form.formState.errors.email?.message}</span>
 
                 <label className='flex flex-col gap-2'>
                     Password:
@@ -85,17 +102,25 @@ const RHFPage = () => {
                 </label>
                 <span className="text-red-500">{form.formState.errors.age?.message}</span>
 
-                <label className='flex flex-col gap-2'>
-                    Date of Birth:
-                    <input type="date" {...form.register("dob", { valueAsDate: true })} />
-                </label>
-                <span className="text-red-500">{form.formState.errors.dob?.message}</span>
-
                 <button
                     type="submit"
                     className="flex w-full justify-center bg-slate-400 rounded-lg"
                 >Masuk</button>
             </form>
+
+            <div className="w-full max-w-xl">
+                {users.length === 0 && (
+                    <p className="text-gray-400">Belum ada data</p>
+                )}
+
+                {users.map((user, i) => (
+                    <div key={i} className="border p-3 rounded mb-2">
+                        <p>{user.name}</p>
+                        <p>{user.email}</p>
+                        <p>{user.age}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
