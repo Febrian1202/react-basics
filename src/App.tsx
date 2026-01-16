@@ -13,6 +13,8 @@ import ProductListPage from './pages/ProductListPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
 import Navbar from './components/Navbar.tsx';
 import AboutPage from './pages/AboutPage.tsx';
+import FormPage from './pages/FormPage.tsx';
+import RHFPage from './pages/RHFPage.tsx';
 
 // type Teacher = {
 //   name: string;
@@ -57,11 +59,13 @@ function App() {
         <Routes>
           <Route path='/' element={<Homepage />}></Route>
           <Route path='/terms' element={<TermsPage />} />
-        // Dynamic Route
+          {/* Dynamic Route */}
           <Route path='/product/:productSlug' element={<ProductDetailPage />} />
           <Route path='/product-list' element={<ProductListPage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/about' element={<AboutPage />} />
+          <Route path='/form' element={<FormPage />} />
+          <Route path='/rhf' element={<RHFPage />} />
 
 
           <Route path='*' element={<NotFoundPage />}></Route>
