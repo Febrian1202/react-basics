@@ -2,19 +2,23 @@
   "employees": [
     {
       "id": "1",
-      "name": "Steve"
+      "name": "Robert",
+      "job": "CEO Meta"
     },
     {
       "id": "2",
-      "name": "Robert"
+      "name": "Robert",
+      "job": "Designer"
     },
     {
       "id": "3",
-      "name": "Mark"
+      "name": "Zuckerberg",
+      "job": "Manager"
     },
     {
       "id": "5",
-      "name": "John Doe"
+      "name": "John Doe",
+      "job": "Intern"
     }
   ],
   "products": [],
