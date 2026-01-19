@@ -1,24 +1,9 @@
 {
   "employees": [
     {
-      "id": "1",
-      "name": "Robert",
-      "job": "CEO Meta"
-    },
-    {
-      "id": "2",
-      "name": "Robert",
-      "job": "Designer"
-    },
-    {
-      "id": "3",
-      "name": "Zuckerberg",
-      "job": "Manager"
-    },
-    {
-      "id": "5",
-      "name": "John Doe",
-      "job": "Intern"
+      "id": "2750",
+      "name": "Setiawan Ade",
+      "job": "Streamer"
     }
   ],
   "products": [],

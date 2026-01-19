@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { axiosInstance } from "../lib/axios";
 
 
@@ -13,7 +13,7 @@ export const useFetchEmployees = () => {
     const [employeesIsLoading, setEmployeesIsLoading] = useState(false);
     const [employeesError, setEmployeesError] = useState("");
 
-    const fetchEmployees = async () => {
+    const fetchEmployees = useCallback(async () => {
         try {
             setEmployeesIsLoading(true); // toggle loading on
 
@@ -27,7 +27,7 @@ export const useFetchEmployees = () => {
         } finally {
             setEmployeesIsLoading(false); // toogle loading off
         }
-    };
+    }, []);
 
     return {
         employees,

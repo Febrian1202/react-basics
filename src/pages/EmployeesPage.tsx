@@ -1,14 +1,20 @@
 import { useFetchEmployees } from "../api/useFetchEmployee";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCreateEmployee } from "../api/useCreateEmployee";
 import { useDeleteEmployee } from "../api/useDeleteEmployee";
 import { useEditEmployee } from "../api/useEditEmployee";
+import Modal from "../components/form/Modal";
 
 // import React from 'react'
 
 
 const EmployeesPage = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [mode, setMode] = useState<"create" | "edit" | "delete">("create");
+    const [selectedEmployee, setSelectedEmployee] = useState<null | { id: string, name: string, job?: string }>(null);
+
     const [inputText, setInputText] = useState("")
+    const [inputJob, setInputJob] = useState("")
 
     const {
         employees,
@@ -17,12 +23,18 @@ const EmployeesPage = () => {
         fetchEmployees
     } = useFetchEmployees();
 
+    useEffect(() => {
+        fetchEmployees();
+    }, [fetchEmployees]);
+
     const { createEmployee, createEmployeeLoading, createEmployeeError } = useCreateEmployee();
 
     const handleCreateEmployee = async () => {
-        await createEmployee(inputText);
+        await createEmployee({ name: inputText, job: inputJob });
         await fetchEmployees();
         setInputText("");
+        setInputJob("");
+        setModalOpen(false);
     };
 
     const { deleteEmployee, deleteEmployeeIsError, deleteEmployeeIsLoading } = useDeleteEmployee();
@@ -30,21 +42,20 @@ const EmployeesPage = () => {
     const handleDeleteEmployee = async (id: string) => {
         await deleteEmployee(id);
         await fetchEmployees();
+
+        setSelectedEmployee(null);
+        setModalOpen(false);
     };
 
-    const [editEmployeeText, setEditEmployeeText] = useState("")
-    const [editEmployeeJobText, setEditEmployeeJobText] = useState("")
-    const [selectedEmployeeId, setSelectedEmployeeId] = useState("")
     const { editEmployee, editEmployeeLoading, editEmployeeError } = useEditEmployee();
 
     const handleEditEmployee = async () => {
-        if (selectedEmployeeId && (editEmployeeText || editEmployeeJobText)) {
-            await editEmployee(selectedEmployeeId, { name: editEmployeeText, job: editEmployeeJobText });
+        if (selectedEmployee) {
+            await editEmployee(selectedEmployee.id, { name: selectedEmployee.name, job: selectedEmployee.job });
             await fetchEmployees();
 
-            setEditEmployeeText("");
-            setEditEmployeeJobText("");
-            setSelectedEmployeeId("");
+            setSelectedEmployee(null);
+            setModalOpen(false);
         }
     }
 
@@ -57,9 +68,12 @@ const EmployeesPage = () => {
                 <button
                     disabled={employeesIsLoading}
                     className="p-2 m-2 rounded bg-blue-500 text-white"
-                    onClick={fetchEmployees}
+                    onClick={() => {
+                        setMode("create");
+                        setModalOpen(true);
+                    }}
                 >
-                    Fetch
+                    Create
                 </button>
                 {employeesIsLoading && <p>Loading ...</p>}
                 {employeesError && <p className="text-red-500">{employeesError}</p>}
@@ -70,7 +84,6 @@ const EmployeesPage = () => {
                             <th className="border p-2 text-left">Nama</th>
                             <th className="border p-2 text-left">Pekerjaan</th>
                             <th className="border p-2 text-left">Action</th>
-                            <th className="border p-2 text-left">Select Edit</th>
                         </tr>
                     </thead>
 
@@ -81,62 +94,30 @@ const EmployeesPage = () => {
                                     <td className="border p-2 text-left">{employee.id}</td>
                                     <td className="border p-2 text-left">{employee.name}</td>
                                     <td className="border p-2 text-left">{employee.job}</td>
-                                    <td className="border p-2 text-left">
+                                    <td className="border p-2 text-center space-x-2">
                                         <button
                                             disabled={deleteEmployeeIsLoading}
-                                            onClick={() => handleDeleteEmployee(employee.id)}
+                                            onClick={() => {
+                                                setMode("delete");
+                                                setSelectedEmployee({ id: employee.id, name: employee.name, job: employee.job });
+                                                setModalOpen(true);
+                                            }}
                                             className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                        <button
+                                            disabled={deleteEmployeeIsLoading}
+                                            onClick={() => {
+                                                setMode("edit");
+                                                setSelectedEmployee({ id: employee.id, name: employee.name, job: employee.job });
+                                                setModalOpen(true);
+                                            }}
+                                            className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
                                         <span>{deleteEmployeeIsError && <p className="text-red-500">{deleteEmployeeIsError}</p>}</span>
-                                    </td>
-                                    <td className="border p-2 text-center">
-                                        <input
-                                            checked={selectedEmployeeId === employee.id}
-                                            onChange={() => {
-                                                setSelectedEmployeeId(employee.id);
-                                                setEditEmployeeText(employee.name);
-                                                setEditEmployeeJobText(employee.job || "")
-                                            }
-                                            }
-                                            type="radio" name="employee-edit" />
                                     </td>
                                 </tr>
                             );
                         })}
                     </tbody>
 
-                    <tfoot>
-                        <tr className="border-b">
-                            <td colSpan={2} className="border p-2 text-center">
-                                <input
-                                    className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border"
-                                    onChange={(e) => setInputText(e.target.value)}
-                                    type="text" /></td>
-                            <td>
-                                <button
-                                    className="p-2 m-2 rounded bg-blue-500 text-white"
-                                    onClick={handleCreateEmployee} disabled={createEmployeeLoading} value={inputText}>Create Employee</button>
-                            </td>
-                        </tr>
-                        <tr className="border-b">
-                            <td colSpan={2} className="border p-2 text-center">
-                                <input className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border" type="text"
-                                    value={editEmployeeText}
-                                    onChange={e => setEditEmployeeText(e.target.value)} />
-                            </td>
-                            <td className="border p-2 text-center">
-                                <input className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border" type="text"
-                                    value={editEmployeeJobText}
-                                    onChange={e => setEditEmployeeJobText(e.target.value)} />
-                            </td>
-                            <td>
-                                <button
-                                    disabled={editEmployeeLoading || !selectedEmployeeId}
-                                    className="p-2 m-2 rounded bg-blue-500 text-white"
-                                    onClick={handleEditEmployee}
-                                >Update Employee</button>
-                            </td>
-                        </tr>
-                    </tfoot>
                     {createEmployeeError && (
                         <span className="text-red-500">
                             {createEmployeeError}
@@ -151,6 +132,64 @@ const EmployeesPage = () => {
                     )}
                 </table>
             </div>
+
+            <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={mode === "create" ? "Create Data" : mode === "edit" ? "Edit Data" : "Delete Data"}>
+                {mode === "edit" && selectedEmployee && (
+                    <div className="flex flex-col gap-2">
+                        <p className="text-white">Nama: </p>
+                        <input
+                            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}
+                            type="text"
+                            value={selectedEmployee.name}
+                            className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border" />
+
+                        <p className="text-white">Job: </p>
+                        <input
+                            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, job: e.target.value })}
+                            type="text"
+                            value={selectedEmployee.job}
+                            className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border" />
+
+                        <button disabled={editEmployeeLoading}
+                            className="p-2 m-2 rounded bg-blue-500 text-white"
+                            onClick={handleEditEmployee}>Update</button>
+                    </div>
+                )}
+
+                {mode === "create" && (
+                    <div className="flex flex-col gap-2">
+                        <p className="text-white">Nama: </p>
+                        <input
+                            onChange={(e) => setInputText(e.target.value)}
+                            type="text"
+                            value={inputText}
+                            className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border" />
+
+                        <p className="text-white">Job: </p>
+                        <input
+                            onChange={(e) => setInputJob(e.target.value)}
+                            type="text"
+                            value={inputJob}
+                            className="w-full rounded focus:ring-blue-500 focus:ring-2 focus:outline-none focus:border-none p-2 border" />
+
+
+                        <button disabled={createEmployeeLoading}
+                            className="p-2 m-2 rounded bg-blue-500 text-white"
+                            onClick={handleCreateEmployee}>Tambah Data</button>
+                    </div>
+                )}
+
+                {
+                    mode === "delete" && selectedEmployee && (
+                        <div className="flex flex-col gap-2">
+                            <p className="text-white text-center font-bold text-2xl">Are you sure you want to delete this employee?</p>
+                            <button disabled={deleteEmployeeIsLoading}
+                                className="p-2 m-2 rounded bg-red-500 text-white"
+                                onClick={() => handleDeleteEmployee(selectedEmployee.id)}>Delete</button>
+                        </div>
+                    )
+                }
+            </Modal>
         </div>
     );
 };
