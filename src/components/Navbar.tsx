@@ -16,6 +16,7 @@ const Navbar = () => {
                     <NavLink to={'/contact'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>Contact</NavLink>
                     <NavLink to={'/form'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>Form</NavLink>
                     <NavLink to={'/rhf'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>RHForm</NavLink>
+                    <NavLink to={'/employees'} className={({ isActive }) => `hover:text-cyan-300 transition-colors duration-200 ${isActive ? "text-cyan-300" : "text-white"}`}>Employees</NavLink>
                 </div>
             </div>
         </nav>

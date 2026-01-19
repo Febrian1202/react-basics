@@ -15,6 +15,7 @@ import Navbar from './components/Navbar.tsx';
 import AboutPage from './pages/AboutPage.tsx';
 import FormPage from './pages/FormPage.tsx';
 import RHFPage from './pages/RHFPage.tsx';
+import EmployeesPage from './pages/EmployeesPage.tsx';
 
 // type Teacher = {
 //   name: string;
@@ -66,6 +67,7 @@ function App() {
           <Route path='/about' element={<AboutPage />} />
           <Route path='/form' element={<FormPage />} />
           <Route path='/rhf' element={<RHFPage />} />
+          <Route path='/employees' element={<EmployeesPage />} />
 
 
           <Route path='*' element={<NotFoundPage />}></Route>
