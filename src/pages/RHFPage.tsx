@@ -3,11 +3,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
-// type RegisterFormSchema = {
-//     username: string;
-//     password: string
-// }
+
 
 const registerFromSchema = z.object({
     name: z
@@ -45,6 +43,8 @@ const registerFromSchema = z.object({
 type RegisterFormSchema = z.infer<typeof registerFromSchema>;
 
 const RHFPage = () => {
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = useState(false)
 
     const form = useForm<RegisterFormSchema>({
@@ -54,6 +54,18 @@ const RHFPage = () => {
     const [users, setUsers] = useState<RegisterFormSchema[]>([])
 
     const handleRegisterUser = (values: RegisterFormSchema) => {
+        // simulasi login sukses
+        localStorage.setItem("isLoggedIn", "true");
+
+        // simpan user login
+        localStorage.setItem("user", JSON.stringify({
+            name: values.name,
+            email: values.email,
+        }));
+
+        // redirect ke halaman protected
+        navigate("/employees");
+
         setUsers(prev => [...prev, values])
         form.reset()
     }

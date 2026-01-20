@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage.tsx';
 import FormPage from './pages/FormPage.tsx';
 import RHFPage from './pages/RHFPage.tsx';
 import EmployeesPage from './pages/employees/EmployeesPage.tsx';
+import PrivateRoute from './routes/PrivateRoute.tsx';
 
 // Component
 function App() {
@@ -27,7 +28,11 @@ function App() {
           <Route path='/about' element={<AboutPage />} />
           <Route path='/form' element={<FormPage />} />
           <Route path='/rhf' element={<RHFPage />} />
-          <Route path='/employees' element={<EmployeesPage />} />
+          <Route path='/employees' element={
+            <PrivateRoute>
+              <EmployeesPage />
+            </PrivateRoute>
+          } />
 
 
           <Route path='*' element={<NotFoundPage />}></Route>
