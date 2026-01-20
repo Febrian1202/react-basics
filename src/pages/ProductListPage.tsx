@@ -1,6 +1,6 @@
-import { Link, useSearchParams } from 'react-router'
+import { useSearchParams } from 'react-router'
 import ProductCard from '../components/ProductCard';
-import { Products } from '../models/Product';
+import { Products } from '../types/Product';
 
 const ProductListPage = () => {
     const [searchParams, setSearchParams] = useSearchParams() // any\
@@ -25,9 +25,7 @@ const ProductListPage = () => {
             </div>
             <div className='flex flex-row w-full p-2 gap-2 border items-center'>
                 {Products.map((product) => (
-                    <Link key={product.slug} to={`/product/${product.slug}`}>
-                        <ProductCard name={product.name} harga={product.harga} />
-                    </Link>
+                    <ProductCard name={product.name} harga={product.harga} slug={product.slug} />
                 )
                 )
                 }

@@ -1,7 +1,7 @@
 // import React from 'react'
 
 import { useParams } from "react-router"
-import { getProductBySlug } from "../models/Product"
+import { getProductBySlug } from "../types/Product"
 
 const ProductDetailPage = () => {
     const { productSlug } = useParams<{ productSlug: string }>()
